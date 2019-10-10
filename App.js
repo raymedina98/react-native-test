@@ -1,8 +1,12 @@
-import React from 'react';
-import { StyleSheet, Text, TextInput, Button, View } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, TextInput, Button, View } from 'react-native';
 import Numbers from './components/Numbers'
+import DetailsScreen from './components/DetailsScreen';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+
+class App extends Component {
  
-export default class App extends React.Component {
   constructor(props){
     super(props);
     this.state = { number : '', pressed : false, numbers : 0 }
@@ -51,8 +55,8 @@ export default class App extends React.Component {
               value={this.state.number}
             />
          {this.state.number>10 ? <Button title={this.state.pressed ? "STOP" : "START"} onPress={this._onPressButton} /> : <View></View>}
-         <View style={{height:40}}></View>
-         {this.state.pressed ? <Numbers numbers={this.state.numbers}/> : <View></View>}
+         
+         {this.state.pressed ? <Numbers numbers={this.state.numbers} navigation={this.props.navigation}/> : <View></View>}
         </View>
       );
   }
@@ -66,3 +70,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+
+// Create the stack navigator and set the App Component as Home
+const AppNavigator = createStackNavigator(
+  {
+    Home: App,
+    Details : DetailsScreen
+  },
+  {
+    initialRouteName : 'Home'
+  }
+);
+
+export default createAppContainer(AppNavigator); 
